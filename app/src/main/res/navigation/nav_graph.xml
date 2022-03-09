@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    android:label="Raider IO"
+    app:startDestination="@id/search">
+
+    <fragment
+        android:id="@+id/search"
+        android:name="com.example.raiderioenhanced.Search"
+        android:label="Raider IO"
+        tools:layout="@layout/fragment_search" >
+        <action
+            android:id="@+id/action_search_to_playerList"
+            app:destination="@id/playerList" />
+        <action
+            android:id="@+id/action_search_self"
+            app:destination="@id/search" />
+    </fragment>
+    <fragment
+        android:id="@+id/playerList"
+        android:name="com.example.raiderioenhanced.PlayerList"
+        android:label="Saved Info"
+        tools:layout="@layout/fragment_player_list" >
+        <action
+            android:id="@+id/action_playerList_to_search"
+            app:destination="@id/search" />
+        <action
+            android:id="@+id/action_playerList_to_details"
+            app:destination="@id/details" />
+    </fragment>
+    <fragment
+        android:id="@+id/details"
+        android:name="com.example.raiderioenhanced.Details"
+        android:label="Details" >
+        <argument
+            android:name="keyyyyyy!"
+            app:argType="integer" />
+    </fragment>
+</navigation>

@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Raider IO</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="name">Name</string>
+    <string name="realm">Realm</string>
+    <string name="region">Region</string>
+    <string name="US">US</string>
+    <string name="EU">EU</string>
+    <string name="KR">KR</string>
+    <string name="TW">TW</string>
+    <string name="search">Search</string>
+    <string name="name_error">Name required!</string>
+    <string name="realm_error">Realm required!</string>
+    <string name="error">Name and/or Realm wrong!</string>
+</resources>
