@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface PlayerDao {
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(player : Player)
 
     @Update
@@ -19,4 +19,10 @@ interface PlayerDao {
 
     @Query("select name from player")
     fun getPlayerNames() : Flow<List<String>>
+
+    @Query("select * from player where name = :name")
+    fun getOnePlayerByName(name : String) : Flow<Player>
+
+    @Query("update player set io = :io where name = :name")
+    suspend fun updatePlayerIO(io : String, name : String)
 }

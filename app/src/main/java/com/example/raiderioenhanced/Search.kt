@@ -40,7 +40,7 @@ class Search : Fragment() {
     ): View? {
         binding = FragmentSearchBinding.inflate(inflater, container, false)
         lifecycleScope.launch {
-            dbViewModel.allPlayerName.observe(viewLifecycleOwner){
+            dbViewModel.allPlayerName.observe(viewLifecycleOwner) {
                 playerList = it
             }
         }
@@ -50,39 +50,18 @@ class Search : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.listOfData.observe(viewLifecycleOwner,
-            Observer {
-                if (it.size > 1) {
-                    binding.textView.visibility = View.INVISIBLE
-                    binding.progressBar.visibility = View.INVISIBLE
-                    MaterialAlertDialogBuilder(requireContext())
-                        .setTitle("${it[0]} : ${it[2]} ${it[3]}")
-                        .setMessage(
-                            "IO : ${it[1]}\nilvl : ${it[4]}\nFaction : ${it[5]}\n" +
-                                    "Convenent : ${it[6]}\nGuild : ${it[7]}\nRaid Progression : ${it[8]} SOFO\n" +
-                                    "Last Online : ${it[9]}"
-                        )
-                        .setCancelable(false)
-                        .setPositiveButton("Save my info") { _, _ ->
-                            if(playerList.contains(it[0])){
-                                Toast.makeText(requireContext(), "Character already exists!", Toast.LENGTH_SHORT)
-                                    .show()
-                            } else {
-                                dbViewModel.addPlayer(it[0],it[10], it[11], it[2], it[3], it[1])
-                                Toast.makeText(requireContext(), "Successfully Added!", Toast.LENGTH_SHORT)
-                                    .show()
-                            }
-                        }
-                        .setNegativeButton("Back") { _, _ ->
-
-                        }
-                        .show()
-                }
+            Observer { char ->
+                dialogOption(char)
             }) //(name, mainIo, spec, cls, ilvl, faction, convenent, guild, raidProg, lastOnline, realm, region)
 
         viewModel.connectionBad.observe(viewLifecycleOwner,
             Observer {
                 if (it) {
-                    Toast.makeText(requireContext(), "Require internet connection!", Toast.LENGTH_SHORT)
+                    Toast.makeText(
+                        requireContext(),
+                        "Require internet connection!",
+                        Toast.LENGTH_SHORT
+                    )
                         .show()
                     binding.progressBar.visibility = View.INVISIBLE
                     binding.textView.visibility = View.INVISIBLE
@@ -143,6 +122,41 @@ class Search : Fragment() {
             if (nameText.text.toString() != "" && realmText.text.toString() != "") {
                 progressBar.visibility = View.VISIBLE
             }
+        }
+    }
+
+    fun dialogOption(char: MutableList<String>) {
+        if (char.size > 1) {
+            binding.textView.visibility = View.INVISIBLE
+            binding.progressBar.visibility = View.INVISIBLE
+            MaterialAlertDialogBuilder(requireContext())
+                .setTitle("${char[0]} : ${char[2]} ${char[3]}")
+                .setMessage(
+                    "IO : ${char[1]}\nilvl : ${char[4]}\nFaction : ${char[5]}\n" +
+                            "Convenent : ${char[6]}\nGuild : ${char[7]}\nRaid Progression : ${char[8]} SOFO\n" +
+                            "Last Online : ${char[9]}"
+                )
+                .setCancelable(false)
+                .setPositiveButton("Save my info") { _, _ ->
+                    if (playerList.contains(char[0])) {
+                        dbViewModel.getPlayerByName(char[0]).observe(viewLifecycleOwner) {
+                            if (it.io == char[1]) {
+                                Toast.makeText(requireContext(), "Character already exists!", Toast.LENGTH_SHORT).show()
+                            } else {
+                                Toast.makeText(requireContext(), "Updated character!", Toast.LENGTH_SHORT).show()
+                                dbViewModel.updateIO(char[0], char[1])
+                            }
+                        }
+                    } else {
+                        dbViewModel.addPlayer(char[0], char[10], char[11], char[2], char[3], char[1])
+                        Toast.makeText(requireContext(), "Successfully Added!", Toast.LENGTH_SHORT)
+                            .show()
+                    }
+                }
+                .setNegativeButton("Back") { _, _ ->
+
+                }
+                .show()
         }
     }
 }

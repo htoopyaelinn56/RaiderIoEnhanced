@@ -16,7 +16,22 @@ class dbViewModel(private val playerDao : PlayerDao) : ViewModel() {
         }
     }
 
+    fun update(name : String, realm : String, region : String, spec : String, cls : String, io : String){
+        val player = Player(name = name, realm = realm, region = region, spec = spec, cls = cls, io = io)
+        viewModelScope.launch {
+            playerDao.update(player)
+        }
+    }
+
+    fun updateIO(name : String, io : String){
+        viewModelScope.launch {
+            playerDao.updatePlayerIO(io, name)
+        }
+    }
+
     fun getPlayer(id : Int) : LiveData<Player> = playerDao.getOnePlayer(id).asLiveData()
+    fun getPlayerByName(name : String) : LiveData<Player> = playerDao.getOnePlayerByName(name).asLiveData()
+
     val allPlayer : LiveData<List<Player>> = playerDao.getAllPlayer().asLiveData()
     val allPlayerName : LiveData<List<String>> = playerDao.getPlayerNames().asLiveData()
 }
