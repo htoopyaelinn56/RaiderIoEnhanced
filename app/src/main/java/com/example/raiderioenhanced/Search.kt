@@ -140,11 +140,11 @@ class Search : Fragment() {
                 .setPositiveButton("Save my info") { _, _ ->
                     if (playerList.contains(char[0])) {
                         dbViewModel.getPlayerByName(char[0]).observe(viewLifecycleOwner) {
-                            if (it.io == char[1]) {
+                            if (it.io == char[1] && it.spec == char[2]) {
                                 Toast.makeText(requireContext(), "Character already exists!", Toast.LENGTH_SHORT).show()
                             } else {
                                 Toast.makeText(requireContext(), "Updated character!", Toast.LENGTH_SHORT).show()
-                                dbViewModel.updateIO(char[0], char[1])
+                                dbViewModel.updateIO(char[0], char[1], char[2])
                             }
                         }
                     } else {

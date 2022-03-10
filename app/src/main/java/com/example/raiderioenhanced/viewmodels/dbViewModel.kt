@@ -23,9 +23,9 @@ class dbViewModel(private val playerDao : PlayerDao) : ViewModel() {
         }
     }
 
-    fun updateIO(name : String, io : String){
+    fun updateIO(name : String, io : String, spec : String){
         viewModelScope.launch {
-            playerDao.updatePlayerIO(io, name)
+            playerDao.updatePlayerIO(io, name, spec)
         }
     }
 

@@ -23,6 +23,6 @@ interface PlayerDao {
     @Query("select * from player where name = :name")
     fun getOnePlayerByName(name : String) : Flow<Player>
 
-    @Query("update player set io = :io where name = :name")
-    suspend fun updatePlayerIO(io : String, name : String)
+    @Query("update player set io = :io,spec = :spec where name = :name")
+    suspend fun updatePlayerIO(io : String, name : String, spec : String)
 }
