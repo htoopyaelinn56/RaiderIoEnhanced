@@ -52,7 +52,7 @@ class Search : Fragment() {
         viewModel.listOfData.observe(viewLifecycleOwner,
             Observer { char ->
                 dialogOption(char)
-            }) //(name, mainIo, spec, cls, ilvl, faction, convenent, guild, raidProg, lastOnline, realm, region)
+            }) 
 
         viewModel.connectionBad.observe(viewLifecycleOwner,
             Observer {
@@ -129,7 +129,7 @@ class Search : Fragment() {
         if (char.size > 1) {
             binding.textView.visibility = View.INVISIBLE
             binding.progressBar.visibility = View.INVISIBLE
-            MaterialAlertDialogBuilder(requireContext())
+            MaterialAlertDialogBuilder(requireContext()) //(name, mainIo, spec, cls, ilvl, faction, convenent, guild, raidProg, lastOnline, realm, region)
                 .setTitle("${char[0]} : ${char[2]} ${char[3]}")
                 .setMessage(
                     "IO : ${char[1]}\nilvl : ${char[4]}\nFaction : ${char[5]}\n" +
