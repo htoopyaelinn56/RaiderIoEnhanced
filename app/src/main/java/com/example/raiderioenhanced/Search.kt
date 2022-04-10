@@ -1,7 +1,6 @@
 package com.example.raiderioenhanced
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -11,12 +10,10 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import com.example.raiderioenhanced.database.Player
 import com.example.raiderioenhanced.database.PlayerApplication
 import com.example.raiderioenhanced.databinding.FragmentSearchBinding
 import com.example.raiderioenhanced.viewmodels.rioViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 class Search : Fragment() {
@@ -28,10 +25,6 @@ class Search : Fragment() {
         dbViewModelFactory(
             (activity?.application as PlayerApplication).database.playerDao()
         )
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
     }
 
     override fun onCreateView(
@@ -52,7 +45,7 @@ class Search : Fragment() {
         viewModel.listOfData.observe(viewLifecycleOwner,
             Observer { char ->
                 dialogOption(char)
-            }) 
+            })
 
         viewModel.connectionBad.observe(viewLifecycleOwner,
             Observer {
@@ -126,6 +119,7 @@ class Search : Fragment() {
     }
 
     fun dialogOption(char: MutableList<String>) {
+
         if (char.size > 1) {
             binding.textView.visibility = View.INVISIBLE
             binding.progressBar.visibility = View.INVISIBLE
@@ -138,17 +132,28 @@ class Search : Fragment() {
                 )
                 .setCancelable(false)
                 .setPositiveButton("Save my info") { _, _ ->
+                    var notUpdatedYet = true;
                     if (playerList.contains(char[0])) {
                         dbViewModel.getPlayerByName(char[0]).observe(viewLifecycleOwner) {
                             if (it.io == char[1] && it.spec == char[2]) {
-                                Toast.makeText(requireContext(), "Character already exists!", Toast.LENGTH_SHORT).show()
+                                if(notUpdatedYet){
+                                    Toast.makeText(requireContext(), "Character already exists!", Toast.LENGTH_SHORT).show()
+                                }
                             } else {
                                 Toast.makeText(requireContext(), "Updated character!", Toast.LENGTH_SHORT).show()
                                 dbViewModel.updateIO(char[0], char[1], char[2])
+                                notUpdatedYet = false;
                             }
                         }
                     } else {
-                        dbViewModel.addPlayer(char[0], char[10], char[11], char[2], char[3], char[1])
+                        dbViewModel.addPlayer(
+                            char[0],
+                            char[10],
+                            char[11],
+                            char[2],
+                            char[3],
+                            char[1]
+                        )
                         Toast.makeText(requireContext(), "Successfully Added!", Toast.LENGTH_SHORT)
                             .show()
                     }
